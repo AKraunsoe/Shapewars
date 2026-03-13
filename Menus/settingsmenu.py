@@ -9,7 +9,7 @@ from globalvariables.gameattributes import menus
 import menucontroller
 
 
-def CreateSettingsMenu():
+def create_settings_menu():
     settings = pm.Menu(title = "Settings",
                        menu_id="settings",
                        width = game_attributes["width"],
@@ -34,7 +34,7 @@ def CreateSettingsMenu():
 
     settings.add.selector(title="Difficulty\t",
                              items=constants.DIFFICULTY_LIST,
-                             selector_id="difficulty_settings", 
+                             selector_id="difficulty", 
                              onchange=menucontroller.set_difficulty,
                              default=game_attributes["difficulty"])
 

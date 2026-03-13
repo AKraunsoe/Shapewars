@@ -1,13 +1,9 @@
-import sys
-
-sys.path.append('.././globalvariables')
-sys.path.append('.././Encounter')
 
 import random
 import math
 
 from circleshape import CircleShape
-import Encounter.encounter as encounter
+import encounter as encounter
 from globalvariables.constants import LINE_WIDTH as width
 from globalvariables.constants import PLAYER_TURN_SPEED as turn_speed
 from globalvariables.constants import PLAYER_SPEED as speed
@@ -100,16 +96,18 @@ class Player(Unit):
             hero_level = 0
             
             for j in range(len(self.team)):
-                hero_level += self.team[j]
+                hero_level += self.team[j].level
 
             hero_level /= len(self.team)
 
+            print(f"current pos: {self.position}")
+
             for i in range(enemies_count):
-                enemies.append(Enemy(self.x-100+(i*100), 
-                                     self.y+100, 
+                enemies.append(Enemy(self.position[0]-100+(i*100), 
+                                     self.position[1]+100, 
                                      p_radius, 
-                                     game_attributes["multiplier"]),
-                                     hero_level)
+                                     game_attributes["multiplier"],
+                                     hero_level))
             encounter.Encounter(self.team, enemies)
         
 
@@ -120,10 +118,10 @@ class Player(Unit):
 class Enemy(Unit):
     def __init__(self, x, y, radius, multiplier, hero_level):
         super().__init__(x, y, radius)
-        self.setAttributes(multiplier, hero_level)
+        self.set_attributes(multiplier, hero_level)
         self.xp_provided = (20 * self.level) * (self.level/hero_level)
 
-    def setAttributes(self, multiplier, hero_level):
+    def set_attributes(self, multiplier, hero_level):
         self.level = math.ceil(hero_level*0.5*multiplier)
         self.initiative = random.randint(10+self.level, (10+self.level)*multiplier)
         self.health = self.health + ((self.level-1)*(20*multiplier))
@@ -137,8 +135,7 @@ class Enemy(Unit):
         c = self.position - forward * self.radius + right
         return [a, b, c]
     
-    def draw(self, screen, type):
-
+    def draw(self, screen):
         pygame.draw.polygon(
         screen,
         "white",

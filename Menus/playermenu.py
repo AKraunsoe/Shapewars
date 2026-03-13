@@ -8,7 +8,7 @@ from globalvariables.gameattributes import game_attributes
 from globalvariables.gameattributes import menus
 import menucontroller
 
-def CreatePlayerMenu(updatable, drawable):
+def create_player_menu(updatable, drawable):
     player_menu = pm.Menu(title="Player Menu",
                           onclose=pm.events.CLOSE,
                           menu_id="player_menu",
