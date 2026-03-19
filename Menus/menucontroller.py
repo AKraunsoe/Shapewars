@@ -1,11 +1,10 @@
 
-
-import pygame_menu as pm
 import pygame
 import globalvariables.constants as constants
-from globalvariables.gameattributes import game_attributes
+from globalvariables.gameattributes import game_attributes, combat_attributes
 from globalvariables.gameattributes import menus
-from units import Player
+from players import Player
+from enemies import Enemy
 
 def get_main_menu():
     if "main_menu" in menus:
@@ -37,12 +36,25 @@ def get_player_menu():
         return player_menu
     return None
 
+def get_combat_menu():
+    if "combat_menu" in menus:
+        combat_menu = menus["combat_menu"]
+
+        if not combat_menu:
+            raise Exception(f"Missing player menu={combat_menu}")
+        
+        return combat_menu
+    return None
+
 def set_resolution(*args, **kwargs):
     value = args[0]
     print(f"tested {value}")
     if len(value[0]) > 0:
         width, height = value[0][0].split("x")
-        pygame.display.set_mode((int(width), int(height)))
+        new_screen = pygame.display.set_mode((int(width), int(height)))
+        game_attributes["screen"] = new_screen
+        new_combat_rect = pygame.Rect(0, 0, int(width), int(height)*7/10)
+        game_attributes["combat_screen"] = new_combat_rect
         settings = get_settings_menu()
         main_menu = get_main_menu()
         player_menu = get_player_menu()
@@ -74,17 +86,20 @@ def start_the_game(*args, **kwargs):
         
     #updatable, drawable
     Player.containers = (game_args[0], game_args[1])
+    Enemy.containers = (game_args[0], game_args[1])
 
-    player = Player(game_attributes["width"] / 2, game_attributes["height"] / 2, constants.PLAYER_RADIUS)
-    game_attributes["player"] = player    
+    player = Player(game_attributes["width"] / 2, game_attributes["height"] / 2, constants.PLAYER_RADIUS, True)
+    game_attributes["player"] = player
 
     settings = get_settings_menu()
     main_menu = get_main_menu()
     player_menu = get_player_menu()
+    combat_menu = get_combat_menu()
 
     settings.disable()
     main_menu.disable()
-    player_menu.disable()  
+    player_menu.disable()
+    combat_menu.disable()
      
 
 def set_difficulty(*args, **kwargs):
