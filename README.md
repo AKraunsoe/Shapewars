@@ -1,4 +1,4 @@
-# FirstProject
+# ShapeWars
 
 A Python-based game project using Pygame.
 
