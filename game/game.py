@@ -1,18 +1,24 @@
 
 import pygame
 from globalvariables.gameattributes import game_attributes, combat_attributes
+from globalvariables.constants import MAP_HEIGHT, MAP_WIDTH, WHITE
 import Menus.combatmenu as combatmenu
 import Menus.settingsmenu as settingsmenu
 import Menus.mainmenu as mainmenu
 import Menus.playermenu as playermenu
+from map import Map
 
 def game():
     pygame.init()
     pygame.display.set_caption("Window using Pygame_menu")
     screen = pygame.display.set_mode((game_attributes["width"], game_attributes["height"]))
     combat_rect = pygame.Rect(0, 0, game_attributes["width"], game_attributes["height"]*7/10)
+
     game_attributes["screen"] = screen
     game_attributes["combat_screen"] = combat_rect
+
+    current_map = Map(1, screen)
+    game_attributes["current_map"] = current_map
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -43,7 +49,7 @@ def game():
                     combat_menu.get_selected_widget()._onreturn
                 else:
                     widgets = combat_menu.get_widgets()
-                    print(len(widgets))
+                    #print(len(widgets))
                     previous = None
                     next = None
                     for i in range(len(widgets)):
@@ -62,20 +68,22 @@ def game():
                                 next = i+1
                                 break
                     if key == pygame.K_w or key==pygame.K_a or key==pygame.K_LEFT:
-                        print(f"widget selected: {widgets[previous].get_id()}")
+                        #print(f"widget selected: {widgets[previous].get_id()}")
                         combat_menu.get_widget(widgets[previous].get_id()).select()
                     elif key==pygame.K_s or key==pygame.K_d or key==pygame.K_RIGHT:
-                        print(f"widget selected: {widgets[next].get_id()}")
+                        #print(f"widget selected: {widgets[next].get_id()}")
                         combat_menu.get_widget(widgets[next].get_id()).select()        
-            
+
+        dt = clock.tick(60) /1000
+
         if main_menu.is_enabled():
-            main_menu.draw(screen)
+            main_menu.draw(game_attributes["screen"])
             main_menu.update(events)            
         elif settings.is_enabled():
-            settings.draw(screen)
+            settings.draw(game_attributes["screen"])
             settings.update(events)
         elif player_menu.is_enabled():
-            player_menu.draw(screen)
+            player_menu.draw(game_attributes["screen"])
             player_menu.update(events)
         else:
             """
@@ -86,18 +94,23 @@ def game():
             """
 
             if combat_menu.is_enabled():
-                combat_menu.draw(screen)
+                combat_menu.draw(game_attributes["screen"])
                 combat_menu.update(events)
-                screen.fill("black", game_attributes["combat_screen"])
+                game_attributes["screen"].fill("black", game_attributes["combat_screen"])
             else:
-                screen.fill("black")
+                game_attributes["screen"].fill("black")
+                for edge in game_attributes["current_map"].edges:
+                    pygame.draw.rect(game_attributes["screen"], WHITE, edge)
+                
+                for corridor in game_attributes["current_map"].corridors:
+                    pygame.draw.rect(game_attributes["screen"], WHITE, corridor[0])
+                    pygame.draw.rect(game_attributes["screen"], WHITE, corridor[1])
 
             for dable in drawable:
-                dable.draw(screen)
+                dable.draw(game_attributes["screen"])
             pygame.display.flip()
-            dt = clock.tick(60) /1000
-            updatable.update(dt)
             
+            updatable.update(dt)
 
             if not player_turn and player_turn is not None:
                 combat_attributes["unit_turn"].take_turn()

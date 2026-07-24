@@ -99,7 +99,7 @@ def update_queue():
                     dead_enemies.append(unit)
                 del combat_attributes["units"][unit.id]
 
-        print(f"dead_enemies: {dead_enemies}\nenemies: {combat_attributes["enemies"]}\ndead_players: {dead_players}\nplayers: {combat_attributes["players"]}")
+        #print(f"dead_enemies: {dead_enemies}\nenemies: {combat_attributes["enemies"]}\ndead_players: {dead_players}\nplayers: {combat_attributes["players"]}")
 
     if (len(dead_enemies) == len(combat_attributes["enemies"]) or
         len(dead_players) == len(combat_attributes["players"])) and len(combat_attributes["players"])> 0:
@@ -112,7 +112,7 @@ def update_queue():
         show_buttons(*(),**{'args': ("main")})
 
 def attack(*args, **kwargs):
-    print(f"{args}, {kwargs}")
+    #print(f"{args}, {kwargs}")
     if 'args' not in kwargs:
         raise Exception("no args given for attack")
     index = kwargs['args']
@@ -122,7 +122,7 @@ def attack(*args, **kwargs):
     target = enemies[index]
     
     ability = combat_attributes["ability"]
-    print(f"ability: {ability}")
+    #print(f"ability: {ability}")
     if ability:
         combat_attributes["unit_turn"].use_ability(target, ability)
     else:
@@ -131,7 +131,7 @@ def attack(*args, **kwargs):
 
 def end_encounter(*args, **kwargs):
 
-    print(f"end encounter:{kwargs}\n{args}")
+    #print(f"end encounter:{kwargs}\n{args}")
 
     players = combat_attributes["players"]
     if len(players):
@@ -186,7 +186,7 @@ def add_player_abilities(players):
     menus['combat_menu'] = combat_menu
 
 def show_buttons(*args, **kwargs):
-    print(f"buttons: {args}\n{kwargs}")
+    #print(f"buttons: {args}\n{kwargs}")
     if 'args' not in kwargs:
         raise Exception("missing args to show buttons")
     type = kwargs['args'] if isinstance(kwargs['args'], str) else kwargs['args'][0]
@@ -203,7 +203,7 @@ def show_buttons(*args, **kwargs):
     ability_butttons = f"{character_type}_ability_"
 
     widgets = menus["combat_menu"].get_widgets()
-    print(f"type:{type}")
+    #print(f"type:{type}")
     for widget in widgets:
         match type:
             case "main":
@@ -224,8 +224,8 @@ def show_buttons(*args, **kwargs):
                 else:
                     widget.hide()
             case "ability":
-                print(f"widget: {widget.get_id()}")
-                print(f"ability_button: {ability_butttons}")
+                #print(f"widget: {widget.get_id()}")
+                #print(f"ability_button: {ability_butttons}")
                 if ability_butttons in widget.get_id():
                     widget.show()
                 else:

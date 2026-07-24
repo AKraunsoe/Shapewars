@@ -48,7 +48,7 @@ def get_combat_menu():
 
 def set_resolution(*args, **kwargs):
     value = args[0]
-    print(f"tested {value}")
+
     if len(value[0]) > 0:
         width, height = value[0][0].split("x")
         new_screen = pygame.display.set_mode((int(width), int(height)))
@@ -74,12 +74,8 @@ def set_resolution(*args, **kwargs):
         game_attributes["height"] = int(height)
 
 def start_the_game(*args, **kwargs):
-    print("start the game")
 
-    print(game_attributes)
-    print(kwargs)
     if 'args' not in kwargs:
-        print("no args")
         pygame.quit
 
     game_args = kwargs['args']     
@@ -106,7 +102,6 @@ def set_difficulty(*args, **kwargs):
     value = args[0]
     settings = get_settings_menu()
     player_menu = get_player_menu()
-    print(f"difficulty {value}")
     if len(value[0]) > 0:
         i_type = value[0][0]
         match i_type:
@@ -141,7 +136,6 @@ def set_difficulty(*args, **kwargs):
 
 def select_player_type(*args, **kwargs):
     value = args[0]
-    print(f"player type {value}")
     if len(value[0]) > 0:
         
         game_attributes["player_type"] = value[0][0]

@@ -8,6 +8,7 @@ sys.path.append('./players')
 sys.path.append('./enemies')
 sys.path.append('./abilities')
 sys.path.append('./encounter')
+sys.path.append('./map')
 
 from game import game
 

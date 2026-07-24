@@ -13,7 +13,7 @@ class Unit(CircleShape):
         super().__init__(x, y, radius)
         self.rotation = 0
         self.initiative = 10
-        self.health = 100
+        self.health = 50
         self.ability_points = 0
         self.base_damage = 10
         self.abilities = []
@@ -25,9 +25,10 @@ class Unit(CircleShape):
         self.dead = False
 
     def create_id(self):
-        id = uuid.uuid4().int
-        while id in game_attributes["player_ids"]:
+        while True:
             id = uuid.uuid4().int
+            if id not in game_attributes["player_ids"]:
+                break
         game_attributes["player_ids"][id] =1
         return id
     
